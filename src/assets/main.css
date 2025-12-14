@@ -1,10 +1,234 @@
-body {
+html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
     overflow: hidden; /* スクロールバーの非表示 */
 }
+
 #app {
     /* Viteのひな形でAppコンポーネントをマウントしている要素のサイズ設定 */
     width: 100%;
     height: 100%;
+}
+
+/* 画面全体を占有し、背景を黒くする */
+.clock-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* ビューポートの高さ全体 */
+    width: 100vw;  /* ビューポートの幅全体 */
+    font-family: 'Digital', monospace; /* デジタルなフォントを推奨 */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* テーマ切り替えボタン */
+.theme-toggle {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border: 2px solid;
+    border-radius: 50%;
+    font-size: 36px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    z-index: 10;
+}
+
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+}
+
+.theme-toggle:hover::before {
+    opacity: 0.1;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(180deg);
+    box-shadow: 0 0 20px currentColor;
+}
+
+.theme-toggle:active {
+    transform: scale(0.95) rotate(180deg);
+}
+
+.theme-toggle .icon {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover .icon {
+    transform: rotate(-180deg);
+}
+
+/* 日付表示エリア */
+.date-display {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+.date-text {
+    font-size: clamp(16px, 1.8vw, 24px);
+    letter-spacing: 2px;
+    opacity: 0.85;
+}
+
+.weekday-text {
+    font-size: clamp(16px, 1.8vw, 24px);
+    opacity: 0.85;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.weekday-text::before {
+    content: '•';
+    margin-right: 15px;
+    opacity: 0.5;
+}
+
+/* 時刻表示エリア */
+.time-display {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+/* HH:MM:SS のメイン表示 */
+.time-main {
+    font-size: clamp(48px, 8vw, 120px);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+/* AM/PM 表示 */
+.time-ampm {
+    font-size: clamp(16px, 2vw, 32px);
+    font-weight: 300;
+    opacity: 0.7;
+    letter-spacing: 0.1em;
+    line-height: 1;
+}
+
+/* ドメイン名表示 */
+.domain-name {
+    font-size: clamp(12px, 1.2vw, 20px);
+    letter-spacing: 0.3em;
+    opacity: 0.6;
+    font-weight: 300;
+    margin: 0;
+    margin-bottom: 30px;
+}
+
+/* SNSリンク */
+.social-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.social-link {
+    text-decoration: none;
+    font-size: clamp(14px, 1.3vw, 18px);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* スマホ向けのメディアクエリ */
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .date-display {
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .time-display {
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .domain-name {
+        margin-bottom: 20px;
+    }
+    
+    .social-links {
+        gap: 15px;
+    }
+    
+    .social-link {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* 極小画面向け */
+@media (max-width: 375px) {
+    .clock-container {
+        padding: 20px;
+    }
+    
+    .date-display {
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 20px;
+    }
+    
+    .weekday-text::before {
+        content: '';
+        margin-right: 0;
+    }
+}
+
+.social-link:hover {
+    opacity: 1;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px currentColor;
+    background-color: currentColor;
+}
+
+.social-link:hover .social-icon {
+    mix-blend-mode: difference;
+    filter: invert(1);
+}
+
+.social-icon {
+    transition: all 0.3s ease;
 }
